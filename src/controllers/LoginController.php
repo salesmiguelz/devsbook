@@ -53,7 +53,7 @@ class LoginController extends Controller {
         $password = filter_input(INPUT_POST, 'password');
         $birthdate = filter_input(INPUT_POST, 'birthdate');
 
-        if($name && $email && $password && birthdate){
+        if($name && $email && $password && $birthdate){
 
             $birthdate = explode('/', $birthdate);
 

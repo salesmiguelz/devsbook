@@ -34,7 +34,7 @@
         </form>
     </section>
 
-    <script src="https://unpkg.com/imask"></script> <!-- Biblioteca que sanitize a data !-->
+    <script src="https://unpkg.com/imask"></script> <!-- Biblioteca que dá sanitize a data !-->
 
     <script>
         IMask(

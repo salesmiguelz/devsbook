@@ -8,14 +8,13 @@ class LoginHandler {
         if(!empty($_SESSION['token'])) {
             $token = $_SESSION['token'];
         
-            $data = User::select()->where('token',$token)->execute();
-            $dat = $data[0]; 
+            $data = User::select()->where('token',$token)->one();
         
-        if($dat && count($dat) > 0) {
+        if(count($data) > 0) {
             $loggedUser = new User();
-            $loggedUser->id = $dat['id'];
-            $loggedUser->email = $dat['email'];
-            $loggedUser->name = $dat['name'];
+            $loggedUser->id = $data['id'];
+            $loggedUser->name = $data['name'];
+            $loggedUser->avatar = $data['avatar'];
         
             return $loggedUser;
         } 
@@ -48,7 +47,7 @@ class LoginHandler {
     public function emailExists($email){
         $user = User::select()->where('email', $email)->one();
 
-        return $user ? true: false;
+        return $user ? true : false;
     }
 
     public function addUser($name, $email, $password, $birthdate){
@@ -60,8 +59,6 @@ class LoginHandler {
             'password' => $hash,
             'name' => $name,
             'birthdate' => $birthdate,
-            'avatar' => 'default.jpg',
-            'cover' => 'cover.jpg',
             'token' => $token
         ])->execute();
 
