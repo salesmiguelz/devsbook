@@ -22,7 +22,7 @@
                 <span class="fidi-date"><?=date('d/m/Y', strtotime($data->created_at))?></span>
             </div>
             <div class="feed-item-head-btn">
-                <img src="<?$base;?>assets/images/more.png" />
+                <img src="<?=$base;?>/assets/images/more.png" />
             </div>
         </div>
         <div class="feed-item-body mt-10 m-width-20">
