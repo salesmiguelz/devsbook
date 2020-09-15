@@ -78,21 +78,21 @@ class UserHandler {
             $user->photos = [];
 
             //Followers
-            $followers = UserRelation::select('user_to', $id)->get();
+            $followers = UserRelation::select()->where('user_to', $id)->get();
 
             foreach ($followers as $follower){
-                $userData = User::select()->where('id', $follower['user_from'])->one();
+                $userData = User::select()->where('id', $follower['user_from'])->one(); // Erro é aqui
                 $newUser = new User();
                 $newUser->id = $userData['id'];
                 $newUser->name = $userData['name'];
                 $newUser->avatar = $userData['avatar'];
 
-                $user->followers[] = $newuser;
+                $user->followers[] = $newUser;
             }
 
             //Following
 
-            $following = UserRelation::select('user_from', $id)->get();
+            $following = UserRelation::select()->where('user_from', $id)->get();
 
             foreach ($following as $follower){
                 $userData = User::select()->where('id', $follower['user_to'])->one();
@@ -101,7 +101,7 @@ class UserHandler {
                 $newUser->name = $userData['name'];
                 $newUser->avatar = $userData['avatar'];
 
-                $user->following[] = $newuser;
+                $user->following[] = $newUser;
             }
 
 
@@ -131,5 +131,36 @@ class UserHandler {
         ])->execute();
 
         return $token;
+    }
+
+    public static function isFollowing ($from, $to){
+        //Se o usuário que está logado está seguindo oq eu estou visualizando 
+        //Parte do loggedUser PARA o usuário acessado
+
+        $data = UserRelation::select()
+            ->where('user_from', $from)
+            ->where('user_to', $to)
+        ->one();
+
+        if ($data){
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function follow($from, $to){
+        UserRelation::insert([
+            'user_from' => $from,
+            'user_to' => $to
+        ])->execute();
+    }
+
+    public static function unfollow($from, $to){
+        UserRelation::delete()
+            ->where('user_from', $from)
+            ->where('user_to', $to)
+        ->execute();
+           
     }
 }
