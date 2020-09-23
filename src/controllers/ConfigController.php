@@ -89,6 +89,7 @@ class ConfigController extends Controller {
 
                 if(in_array($newCover['type'], ['image/jpeg', 'image/jpg', 'image/png'])) {
                     $coverName = $this->cutImage($newCover, 850, 310, 'media/covers');
+                    $updateFields['cover'] = $coverName;
                 }
             }
 
