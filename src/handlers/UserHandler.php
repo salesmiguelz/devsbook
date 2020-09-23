@@ -65,6 +65,7 @@ class UserHandler {
             $user = new User();
             $user->id = $data['id'];
             $user->name = $data['name'];
+            $user->email = $data['email'];
             $user->birthdate = $data['birthdate'];
             $user->city = $data['city'];
             $user->work = $data['work'];
@@ -183,4 +184,17 @@ class UserHandler {
 
         return $users;
     }
+
+    public static function isMineEmail($email, $id){
+        $user = User::select()->where('id', $id)->one();
+
+        if($user['email'] === $email){
+            return true;
+        } else{
+            return false;
+        }
+        
+    }
+
+   
 }

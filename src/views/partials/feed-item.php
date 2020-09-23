@@ -1,11 +1,11 @@
-<div class="box feed-item">
+<div class="box feed-item" data-id='<?=$data->id;?>'>
     <div class="box-body">
         <div class="feed-item-head row mt-20 m-width-20">
             <div class="feed-item-head-photo">
-                <a href=""><img src="<?=$base;?>/media/avatars/<?=$data->user->avatar?>" /></a>
+                <a href="<?=$base;?>/perfil/<?=$data->user->id?>"><img src="<?=$base;?>/media/avatars/<?=$data->user->avatar?>" /></a>
             </div>
             <div class="feed-item-head-info">
-                <a href=""><span class="fidi-name"><?=$data->user->name?></span></a>
+                <a href="<?=$base;?>/perfil/<?=$data->user->id?>"><span class="fidi-name"><?=$data->user->name?></span></a>
                 <span class="fidi-action">
                 <?php
                     switch($data->type){
@@ -29,7 +29,7 @@
             <?=nl2br($data->body)?>
         </div>
         <div class="feed-item-buttons row mt-20 m-width-20">
-            <div class="like-btn <?=($data->liked ? 'on': '')?>)"><?=$data->likeCount;?></div>
+            <div class="like-btn <?=($data->liked ? 'on': '')?>"><?=$data->likeCount;?></div>
             <div class="msg-btn"><?=count($data->comments);?></div>
         </div>
         <div class="feed-item-comments">
@@ -51,7 +51,7 @@
 
             <div class="fic-answer row m-height-10 m-width-20">
                 <div class="fic-item-photo">
-                    <a href=""><img src="<?=$base;?>media/avatars/<?=$loggedUser->avatar;?>" /></a>
+                    <a href=""><img src="<?=$base;?>/media/avatars/<?=$loggedUser->avatar;?>" /></a>
                 </div>
                 <input type="text" class="fic-item-field" placeholder="Escreva um comentário" />
             </div>

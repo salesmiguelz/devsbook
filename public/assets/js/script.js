@@ -44,3 +44,21 @@ document.querySelector('.feed-new-input').addEventListener('blur', function(obj)
         document.querySelector('.feed-new-input-placeholder').style.display = 'block';
     }
 });
+
+if(document.querySelector('.like-btn')) {
+    document.querySelectorAll('.like-btn').forEach(item=>{
+        item.addEventListener('click', ()=>{
+            let id = item.closest('.feed-item').getAttribute('data-id');
+            let count = parseInt(item.innerText);
+            if(item.classList.contains('on') === false) {
+                item.classList.add('on');
+                item.innerText = ++count;
+            } else {
+                item.classList.remove('on');
+                item.innerText = --count;
+            }
+
+	        fetch(BASE+'/ajax/like/'+id);
+        });
+    });
+}

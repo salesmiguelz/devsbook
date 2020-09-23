@@ -23,6 +23,7 @@
                     <?php if (!empty($user->city)): ?>
                         <div class="user-info-mini">
                             <img src="<?=$base;?>/assets/images/pin.png" />
+                            <?=$user->city?>
                         </div>
                     <?php endif; ?>
 
