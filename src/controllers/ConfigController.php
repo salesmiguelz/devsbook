@@ -34,9 +34,9 @@ class ConfigController extends Controller {
 
     public function configAction(){
 
-        // $avatar = filter_input(INPUT_POST, 'avatar');
-        // $cover = filter_input(INPUT_POST, 'cover');
-       
+        
+        $avatarName = '';
+        $coverName = '';
         $name = filter_input(INPUT_POST, 'name');
         $birthdate = filter_input(INPUT_POST, 'birthdate');
         $email = filter_input(INPUT_POST, 'email',  FILTER_SANITIZE_EMAIL);
@@ -75,21 +75,22 @@ class ConfigController extends Controller {
              //Avatar
              if(isset($_FILES['avatar']) && !empty($_FILES['avatar']['tmp_name'])) {
                 $newAvatar = $_FILES['avatar'];
-
                 if(in_array($newAvatar['type'], ['image/jpeg', 'image/jpg', 'image/png'])) {
                     $avatarName = $this->cutImage($newAvatar, 200, 200, 'media/avatars');
-                    
+                   
+
+
                 }
             }
-
+            
             //Cover
-
             if(isset($_FILES['cover']) && !empty($_FILES['cover']['tmp_name'])) {
                 $newCover = $_FILES['cover'];
 
                 if(in_array($newCover['type'], ['image/jpeg', 'image/jpg', 'image/png'])) {
-                    $coverName = $this->cutImage($newCover, 850, 310, 'media/covers');
-                    $updateFields['cover'] = $coverName;
+                    $coverName = $this->cutImage($newCover, 850, 310, 'media/covers')
+                    ;
+                   
                 }
             }
 
@@ -99,8 +100,7 @@ class ConfigController extends Controller {
                 $this->redirect('/config');
             }
 
-           
-            
+
 
             User::update()
                 ->set('avatar', $avatarName)
@@ -114,6 +114,8 @@ class ConfigController extends Controller {
             ->where('id', $this->loggedUser->id)
             ->execute();
 
+            
+
        
         } else{
             $_SESSION['flash'] = 'Preencha os dados corretamente!';
@@ -121,32 +123,31 @@ class ConfigController extends Controller {
         } 
 
         
-
-       
         $this->redirect('/perfil');
+       
+       
 
     }
 
-    private function cutImage($file, $w, $h, $folder){
+    private function cutImage($file, $w, $h, $folder) {
         list($widthOrig, $heightOrig) = getimagesize($file['tmp_name']);
-
         $ratio = $widthOrig / $heightOrig;
 
         $newWidth = $w;
         $newHeight = $newWidth / $ratio;
 
-        if($newHeight < $h){
+        if($newHeight < $h) {
             $newHeight = $h;
             $newWidth = $newHeight * $ratio;
         }
 
         $x = $w - $newWidth;
         $y = $h - $newHeight;
-        $x = $x < 0 ? $x / 2 : $x;    
-        $y = $y < 0 ? $y / 2 : $y;  
-        
+        $x = $x < 0 ? $x / 2 : $x;
+        $y = $y < 0 ? $y / 2 : $y;
+
         $finalImage = imagecreatetruecolor($w, $h);
-        switch($file['type']){
+        switch($file['type']) {
             case 'image/jpeg':
             case 'image/jpg':
                 $image = imagecreatefromjpeg($file['tmp_name']);
@@ -162,7 +163,7 @@ class ConfigController extends Controller {
             $newWidth, $newHeight, $widthOrig, $heightOrig
         );
 
-        $fileName = md5(time().rand(0, 999999)).'.jpg';
+        $fileName = md5(time().rand(0,9999)).'.jpg';
 
         imagejpeg($finalImage, $folder.'/'.$fileName);
 

@@ -8,7 +8,7 @@
     <h1>Configurações</h1>
 
     <div class="container-input-group">
-        <form method="POST" action="<?=$base;?>/config">
+        <form method="POST" enctype="multipart/form-data" action="<?=$base;?>/config" >
 
         <?php if(!empty($flash)): ?>
             <div class="flash"><?php echo $flash; ?></div> 
