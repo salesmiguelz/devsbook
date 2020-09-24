@@ -34,9 +34,12 @@ class ConfigController extends Controller {
 
     public function configAction(){
 
-        
-        $avatarName = '';
-        $coverName = '';
+        $userInfo = UserHandler::getUser($this->loggedUser->id);
+
+       
+
+        $avatarName = $userInfo->avatar;
+        $coverName =  $userInfo->cover;
         $name = filter_input(INPUT_POST, 'name');
         $birthdate = filter_input(INPUT_POST, 'birthdate');
         $email = filter_input(INPUT_POST, 'email',  FILTER_SANITIZE_EMAIL);
@@ -65,11 +68,8 @@ class ConfigController extends Controller {
                 
             }
 
-            if(UserHandler::isMineEmail($email, $this->loggedUser->id) === false){
-                if(UserHandler::emailExists($email)){
-                    $_SESSION['flash'] = 'E-mail já existe!';
-                    $this->redirect('/config');
-                }
+            if(empty($email)){
+                $email = $userInfo->email;
             }
             
              //Avatar
@@ -77,9 +77,6 @@ class ConfigController extends Controller {
                 $newAvatar = $_FILES['avatar'];
                 if(in_array($newAvatar['type'], ['image/jpeg', 'image/jpg', 'image/png'])) {
                     $avatarName = $this->cutImage($newAvatar, 200, 200, 'media/avatars');
-                   
-
-
                 }
             }
             
@@ -103,26 +100,22 @@ class ConfigController extends Controller {
 
 
             User::update()
-                ->set('avatar', $avatarName)
-                ->set('cover', $coverName)
-                ->set('name', $name)
-                ->set('birthdate', $birthdate)
-                ->set('email', $email)
-                ->set('city', $city)
-                ->set('work', $work)
-                ->set('password', $hash)
+            ->set('name', $name)
+            ->set('birthdate', $birthdate)
+            ->set('email', $email)
+            ->set('city', $city)
+            ->set('work', $work)
+            ->set('password', $hash)
+            ->set('avatar', $avatarName)
+            ->set('cover', $coverName)
             ->where('id', $this->loggedUser->id)
             ->execute();
 
-            
-
-       
         } else{
             $_SESSION['flash'] = 'Preencha os dados corretamente!';
             $this->redirect('/config');
         } 
 
-        
         $this->redirect('/perfil');
        
        
